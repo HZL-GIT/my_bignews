@@ -28,7 +28,7 @@
 
             // 使用原生的语法设置token请求头
             // 弊端：每一个请求都需要设置请求头，使得代码冗余，此时考虑使用jq
-            
+
             // //(1).实例化ajax对象
             // var xhr = new XMLHttpRequest();
             // //(2).设置请求方法和地址
@@ -45,14 +45,51 @@
 
             // 为了使得这个全局配置在每一个页面的ajax请求都能使用，所以将其放入jq文件中，那么只要页面调用了jq.js的文件包，这个全局配置就会生效(查看请在./libs/jquery-1.12.4.min.js中最后内容查看)
             $.ajax({
-                url:'http://localhost:8080/api/v1/admin/user/info',
-                type:'get',
-                dataType:'json',
-                data:'',
-                success: function(backData){
+                url: 'http://localhost:8080/api/v1/admin/user/info',
+                type: 'get',
+                dataType: 'json',
+                data: '',
+                success: function (backData) {
                     console.log(backData);
+                    $('.user_info>img').attr('src', backData.data.userPic);
+                    $('.user_info>span').text(backData.data.nickname);
+                    $('.user_center_link>img').attr('src', backData.data.userPic);
                 }
             });
+
+            // 退出登录按钮功能设置
+            $('.logout').click(function () {
+                localStorage.removeItem('token');
+                window.location.href = './index.html';
+            })
+
+            // 给左侧导航栏设置点击事件
+            $('.level01').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                if ($(this).index() == 1) {
+                    // 给第二个栏目添加点击显示二级菜单   卷帘门效果
+                    $('.level02').slideToggle();
+                    $(this).find('b').toggleClass('rotate0');
+
+                    /* 
+                    需求：点击左侧文章管理，默认选中第一个元素，并且右侧跳转相应页面
+                    ja中的 click 等同于原生DOM的 onclick 但是他只能触发注册事件
+                    原生DOM的onclick可以触发元素的注册事件与默认事件
+                    所以$('.level02>li:eq(0)').click();只能触发li标签的注册事件，无法触发 a 标签的默认跳转事件
+                    $('.level02>li:eq(0)')[0].click();通过取下标的形式，将元素转成了DOM原生的，但依旧无法实现右侧跳转的需求，因为要触发默认事件的是 a 标签
+                    $('.level02>li:eq(0) a')[0].click();这样才能触发 a 标签的注册事件与默认事件。并且通过事件冒泡也能触发 li 标签的注册事件 
+                    */
+                    // $('.level02>li:eq(0)').click();
+                    // $('.level02>li:eq(0)')[0].click();
+                    $('.level02>li:eq(0) a')[0].click();
+                } else {
+                    $('.level02>li').removeClass('active');
+                }
+            })
+
+            $('.level02>li').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+            })
 
 
         })
@@ -69,34 +106,40 @@
         </div>
         <!-- 左侧导航栏 -->
         <div class="menu">
-            <div class="level01 active"><a href="#" target="main_frame"><i
+            <div class="level01 active"><a href="./main_count.html" target="my_frame"><i
                         class="iconfont icon-yidiandiantubiao04"></i><span>首页</span></a></div>
             <div class="level01"><a href="#"><i class="iconfont icon-icon-article"></i><span>文章管理</span><b
                         class="iconfont icon-arrowdownl"></b></a></div>
             <ul class="level02">
-                <li><a href="#" target="main_frame"><i class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
-                <li><a href="#" target="main_frame"><i class="iconfont icon-previewright"></i><span>发表文章</span></a></li>
-                <li><a href="#" target="main_frame"><i class="iconfont icon-previewright"></i><span>文章类别管理</span></a>
+                <li><a href="./article_list.html" target="my_frame"><i
+                            class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
+                <li><a href="./article_release.html" target="my_frame"><i
+                            class="iconfont icon-previewright"></i><span>发表文章</span></a></li>
+                <li><a href="./article_category.html" target="my_frame"><i
+                            class="iconfont icon-previewright"></i><span>文章类别管理</span></a>
                 </li>
             </ul>
 
-            <div class="level01"><a href="#" target="main_frame"><i
+            <div class="level01"><a href="./comment_list.html" target="my_frame"><i
                         class="iconfont icon-comment"></i><span>评论管理</span></a></div>
-            <div class="level01" id="user"><a href="#" target="main_frame"><i
+            <div class="level01" id="user"><a href="./user.html" target="my_frame"><i
                         class="iconfont icon-user"></i><span>个人中心</span></a></div>
         </div>
+
         <!-- 顶部栏 -->
         <div class="header_bar">
             <div class="user_center_link">
-                <a href="./user.html" target="main_frame">个人中心</a>
+                <a href="./user.html" target="my_frame">个人中心</a>
                 <img src="images/2.jpg" alt="person">
                 <a href="javascript:void(0)" class="logout"><i class="iconfont icon-tuichu"></i> 退出</a>
             </div>
         </div>
         <!-- 右侧主体内容 -->
         <div class="main" id="main_body">
-
+            <!-- iframe  设置多个嵌套网页 -->
+            <iframe src="./main_count.html" frameborder="0" name="my_frame"></iframe>
         </div>
     </div>
 </body>
+
 </html>
