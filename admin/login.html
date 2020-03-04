@@ -53,6 +53,10 @@
           },
           success: function (backData) {
             console.log(backData);
+
+            // 将token利用localStorage永久的存储起来
+            localStorage.setItem('token',backData.token);
+
             // 4.服务器响应之后 跳转首页
             if (backData.code == 200) {
               // alert('恭喜登录成功');

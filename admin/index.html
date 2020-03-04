@@ -7,15 +7,43 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>大事件-后台首页</title>
     <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/iconfont.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/iconfont.css">
+    <link rel="stylesheet" href="./css/main.css">
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 导入bootstrap的js文件 -->
     <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
     <script>
         $(function () {
-            // 发送用户信息请求
+            // 发送用户信息请求   由于没有设置token，出现403无权限报错
+            // $.ajax({
+            //     url:'http://localhost:8080/api/v1/admin/user/info',
+            //     type:'get',
+            //     dataType:'json',
+            //     data:'',
+            //     success: function(backData){
+            //         console.log(backData);
+            //     }
+            // });
+
+            // 使用原生的语法设置token请求头
+            // 弊端：每一个请求都需要设置请求头，使得代码冗余，此时考虑使用jq
+            
+            // //(1).实例化ajax对象
+            // var xhr = new XMLHttpRequest();
+            // //(2).设置请求方法和地址
+            // //get请求的数据直接添加在url的后面 格式是 url?key=value
+            // xhr.open('get', 'http://localhost:8080/api/v1/admin/user/info');
+            // //(3).设置token请求头
+            // xhr.setRequestHeader('Authorization',localStorage.getItem('token'));
+            // //(4).发送请求
+            // xhr.send();
+            // //(5).注册回调函数
+            // xhr.onload = function() {
+            //     console.log(xhr.responseText)
+            // };
+
+            // 为了使得这个全局配置在每一个页面的ajax请求都能使用，所以将其放入jq文件中，那么只要页面调用了jq.js的文件包，这个全局配置就会生效(查看请在./libs/jquery-1.12.4.min.js中最后内容查看)
             $.ajax({
                 url:'http://localhost:8080/api/v1/admin/user/info',
                 type:'get',
@@ -25,6 +53,8 @@
                     console.log(backData);
                 }
             });
+
+
         })
     </script>
 </head>
