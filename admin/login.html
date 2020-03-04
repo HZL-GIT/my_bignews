@@ -35,7 +35,9 @@
         let password = $('.input_pass').val();
         // 2.1 非空判断
         if (username.length == 0 || password.length == 0) {
-          alert('请输入用户名和密码');
+          // alert('请输入用户名和密码');
+          $('#myModal').modal();
+          $('.modal-body>p').text("请输入用户名和密码");
           // 如果为空则不执行后面的代码，直接return
           return
         }
@@ -53,11 +55,19 @@
             console.log(backData);
             // 4.服务器响应之后 跳转首页
             if (backData.code == 200) {
-              alert('恭喜登录成功');
-              window.location.href = './index.html'
+              // alert('恭喜登录成功');
+              $('#myModal').modal();
+              $('.modal-body>p').text("恭喜登录成功");
+              $('#myModal').on('hidden.bs.modal', function (e) {
+                // do something...
+                window.location.href = './index.html'
+              })
+             
             } else {
               // 4.1账号密码不正确，不跳转，并清空输入框
-              alert(backData.msg);
+              // alert(backData.msg);
+              $('#myModal').modal();
+              $('.modal-body>p').text(backData.msg);
               $('.input_txt').val('');
               $('.input_pass').val('');
             }
@@ -89,6 +99,25 @@
       </form>
     </div>
   </div>
+
+  <!-- 模态框 -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">友情提示</h4>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">确定</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
 </body>
 
