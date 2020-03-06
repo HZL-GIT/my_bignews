@@ -137,7 +137,8 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="javascript:void(0)" class="btn btn-success" id="xinzengfenlei" data-toggle="modal" data-target="#myModal">新增分类</a>
+                            <a href="javascript:void(0)" class="btn btn-success" id="xinzengfenlei" data-toggle="modal"
+                                data-target="#myModal">新增分类</a>
                         </td>
                     </tr>
                 </tfoot>
@@ -174,8 +175,6 @@
         </div>
     </div>
 
-
-
     <!-- 模板引擎 -->
     <script id="cat_list" type="text/html">
         {{ each data v }}
@@ -189,5 +188,99 @@
         </tr>
         {{ /each }}
     </script>
+
+    <!-- 再次练习 -->
+    <!-- <script>
+        $(function () {
+            $.ajax({
+                url: BigNew.category_list,
+                type: 'get',
+                dataType: 'json',
+                data: '',
+                success: function (backData) {
+                    console.log(backData);
+                    $('.category_table>tbody').html(template('cat_list', backData));
+                }
+            });
+
+            // 设置模态框事件
+            $('#myModal').on('show.bs.modal', function (e) {
+                // do something...
+                console.log(e.relatedTarget);
+                $('.btn-confirm').text($(e.relatedTarget).text());
+
+                if ($(e.relatedTarget).text() == '编辑') {
+                    $('#recipient-name').val($(e.relatedTarget).parent().prev().prev().text());
+                    $('#message-text').val($(e.relatedTarget).parent().prev().text());
+                    $('.btn-confirm').attr('data-id',$(e.relatedTarget).attr('data-id'));
+                }
+            });
+
+            $('.btn-cancel').click(function () {
+                $('#myModal form')[0].reset();
+            });
+
+            $('.btn-confirm').click(function () {
+                if ($(this).text() == '新增分类') {
+                    $.ajax({
+                        url:BigNew.category_add,
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            name:$('#recipient-name').val(),
+                            slug:$('#message-text').val()
+                        },
+                        success: function(backData){
+                            console.log(backData);
+                            if (backData.code == 201) {
+                                alert(backData.msg);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }else {
+                    $.ajax({
+                        url:BigNew.category_edit,
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            id:$(this).attr('data-id'),
+                            name:$('#recipient-name').val(),
+                            slug:$('#message-text').val()
+                        },
+                        success: function(backData){
+                            console.log(backData);
+                            if (backData.code == 200) {
+                                alert(backData.msg);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+            })
+
+            // 删除按钮
+            $('body').on('click','.btn-delete',function () {
+                $.ajax({
+                    url:BigNew.category_delete,
+                    type:'post',
+                    dataType:'json',
+                    data:{
+                        id:$(this).attr('data-id')
+                    },
+                    success: function(backData){
+                        console.log(backData);
+                        if (backData.code == 204) {
+                            alert(backData.msg);
+                            window.location.reload();
+                        }
+                    }
+                });
+            })
+        })
+    </script> -->
+
+
+</body>
 
 </html>
