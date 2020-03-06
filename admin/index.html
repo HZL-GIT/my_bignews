@@ -13,6 +13,7 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 导入bootstrap的js文件 -->
     <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./libs/http.js"></script>
     <script>
         $(function () {
             // 发送用户信息请求   由于没有设置token，出现403无权限报错
@@ -45,7 +46,8 @@
 
             // 为了使得这个全局配置在每一个页面的ajax请求都能使用，所以将其放入jq文件中，那么只要页面调用了jq.js的文件包，这个全局配置就会生效(查看请在./libs/jquery-1.12.4.min.js中最后内容查看)
             $.ajax({
-                url: 'http://localhost:8080/api/v1/admin/user/info',
+                // url: 'http://localhost:8080/api/v1/admin/user/info',
+                url: BigNew.user_info,
                 type: 'get',
                 dataType: 'json',
                 data: '',
