@@ -51,13 +51,15 @@
                 //禁用表单默认提交事件
                 e.preventDefault();
                 //创建FormData对象：参数是表单dom对象
-                var fd = new FormData($('form')[0])
+                var fd = new FormData($('form')[0]);
                 $.ajax({
                     url:BigNew.user_edit,
                     type:'post',
                     dataType:'json',
                     data:fd,
+                    // 不要设置请求头，由formdata来处理
                     contentType: false,
+                    // 不要拼接data里的对象，由formdata来处理
                     processData: false,
                     success: function(backData){
                         console.log(backData);
@@ -104,6 +106,7 @@
                     <div class="col-sm-10">
                         <img src="images/2.jpg" alt="" class="user_pic">
                         <input style="display: none" name="userPic" type="file" id="exampleInputFile">
+                        <!--  -->
                         <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
                         <br>
                         <label for="exampleInputFile">

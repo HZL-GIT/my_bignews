@@ -72,7 +72,6 @@
                     // 给第二个栏目添加点击显示二级菜单   卷帘门效果
                     $('.level02').slideToggle();
                     $(this).find('b').toggleClass('rotate0');
-
                     /* 
                     需求：点击左侧文章管理，默认选中第一个元素，并且右侧跳转相应页面
                     ja中的 click 等同于原生DOM的 onclick 但是他只能触发注册事件
@@ -92,7 +91,6 @@
             $('.level02>li').click(function () {
                 $(this).addClass('active').siblings().removeClass('active');
             })
-
 
         })
     </script>
