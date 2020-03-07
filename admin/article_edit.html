@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>文章列表</title>
+    <!-- 日期插件 -->
+    <script src="./libs/jedate/js/jedate.js"></script>
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css">
+    <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css">
+    <!-- wang富文本插件 -->
+    <script src="./libs/wangEditor.js"></script>
+    <!-- 页面样式 -->
     <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/iconfont.css">
@@ -14,6 +21,25 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
+
+    <script>
+        $(function () {
+            jeDate("#testico", {
+                isinitVal: true,  //显示当前时间
+                festival: true,//是否显示农历
+                // multiPane: true,//是否双面板显示
+                // onClose: true,//是否为选中日期后关闭弹层，为false时选中日期后关闭弹层
+                format: "YYYY-MM-DD",
+                theme: { bgcolor: "#00A1CB", color: "#ffffff", pnColor: "#00CCFF" },//蓝色主题
+                zIndex:10002,  
+            });
+
+            var E = window.wangEditor;
+            var editor = new E('#editor');
+            // 或者 var editor = new E( document.getElementById('editor') )
+            editor.create();
+        })
+    </script>
 </head>
 
 <body>
@@ -51,11 +77,22 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">发布时间：</label>
                     <div class="col-sm-4">
+                        <!-- 日期插件 -->
+                        <div class="jeitem">
+                            <div class="jeinpbox">
+                                <input type="text" class="jeinput" id="testico" placeholder="YYYY-MM-DD">
+                                <div class="icons jebtns"
+                                    onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',festival:true,theme:{ bgcolor:'#00A1CB',color:'#ffffff', pnColor:'#00CCFF'},zIndex:10002})">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
+                        <!-- 富文本插件 -->
+                        <div id="editor"></div>
                     </div>
                 </div>
                 <div class="form-group">
