@@ -16,7 +16,7 @@
   <!-- 引入bootstrap的js文件 -->
   <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
   <script src="./libs/http.js"></script>
-  <!-- <script>
+  <script>
     $(function () {
       /*1.点击登录按钮 
        2.获取用户名和密码
@@ -82,7 +82,7 @@
       })
 
     })
-  </script> -->
+  </script>
 </head>
 
 <body>
@@ -125,6 +125,52 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
+
+
+  <!-- <script>
+    $(function () {
+      $('.input_sub').click(function (e) {
+        e.preventDefault();
+        let userName = $('.input_txt').val();
+        let passWord = $('.input_pass').val();
+        if (userName.length == 0 || passWord.length == 0) {
+          // alert('请输入用户名或密码');
+          $('#myModal').modal();
+          $('#myModal p').text('请输入用户名或密码');
+          return;
+        }
+        $.ajax({
+          url: BigNew.user_login,
+          type: 'post',
+          dataType: 'json',
+          data: {
+            username: userName,
+            password: passWord,
+          },
+          success: function (backData) {
+            console.log(backData);
+            localStorage.setItem('token', backData.token);
+
+            if (backData.code == 200) {
+              // alert(backData.msg);
+              $('#myModal').modal();
+              $('#myModal p').text(backData.msg);
+              $('#myModal').on('hidden.bs.modal', function (e) {
+                // do something...
+                window.location.href = './index.html'
+              })
+            } else {
+              // alert(backData.msg);
+              $('#myModal').modal();
+              $('#myModal p').text(backData.msg);
+              $('.input_txt').val('');
+              $('.input_pass').val('');
+            }
+          }
+        });
+      })
+    })
+  </script> -->
 </body>
 
 </html>
