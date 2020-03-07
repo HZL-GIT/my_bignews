@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日期插件使用练习</title>
+    <link type="text/css" rel="stylesheet" href="./test/jeDate-test.css">
+    <link type="text/css" rel="stylesheet" href="./skin/jedate.css">
+    <script type="text/javascript" src="./src/jedate.js"></script>
+</head>
+
+<body>
+    <div class="jeitem">
+        <label class="jelabel">点击图标</label>
+        <div class="jeinpbox">
+            <input type="text" class="jeinput" id="testico" placeholder="YYYY-MM-DD">
+            <div class="icons jebtns" onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',festival:true,theme:{ bgcolor:'#00A1CB',color:'#ffffff', pnColor:'#00CCFF'},})"></div>
+        </div>
+    </div>
+    <script>
+        //或者为这样的
+        jeDate("#testico", {
+            isinitVal: true,  //显示当前时间
+            festival:true,//是否显示农历
+            // multiPane: true,//是否双面板显示
+            // onClose: true,//是否为选中日期后关闭弹层，为false时选中日期后关闭弹层
+            format: "YYYY-MM-DD",
+            theme:{ bgcolor:"#00A1CB",color:"#ffffff", pnColor:"#00CCFF"},//蓝色主题
+        })
+    </script>
+</body>
+
+</html>

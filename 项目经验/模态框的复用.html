@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模态框的复用</title>
+    <script src="../admin/libs/jquery-1.12.4.min.js"></script>
+    <script src="../admin/libs/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../admin/libs/bootstrap/css/bootstrap.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn1,
+        .btn2 {
+            width: 50px;
+            height: 30px;
+            margin: 20px;
+        }
+    </style>
+    <script>
+        // 模态框的复用
+        $(function () {
+            // 模态框事件
+            // 通过e.relatedTarget确认按钮是新增还是编辑
+            $('#myModal').on('show.bs.modal', function (e) {
+                console.log('弹出了');
+                console.log(e.relatedTarget);
+                // if (e.relatedTarget.innerText == '新增') {
+                if ($(e.relatedTarget).text() == '新增') {
+                    $('#myModal .btn-confirm').text(e.relatedTarget.innerText);
+                } else {
+                    $('#myModal .btn-confirm').text(e.relatedTarget.innerText);
+                }
+            });
+
+            $('#myModal .btn-cancel').click(function () {
+                $('#myModal form')[0].reset();
+            });
+
+            $('#myModal .btn-confirm').on('click',function () {
+                if ($(this).text() == '新增') {
+                    alert('请输入新增内容');
+                } else {
+                    alert('请输入编辑内容');
+                }
+            });
+
+        })
+    </script>
+</head>
+
+<body>
+    <button class="btn1 btn-info" data-toggle="modal" data-target="#myModal">新增</button>
+    <button class="btn2 btn-success" data-toggle="modal" data-target="#myModal">编辑</button>
+    <!-- 模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">友情提示</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">内容</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">信息</label>
+                            <input class="form-control" id="message-text">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-confirm" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
