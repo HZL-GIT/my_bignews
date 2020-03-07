@@ -11,8 +11,102 @@
     <link rel="stylesheet" href="./css/iconfont.css">
     <link rel="stylesheet" href="./css/main.css">
     <script src="./libs/jquery-1.12.4.min.js"></script>
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
     <!-- 引入模板引擎js文件 -->
     <script src="./libs/template-web.js"></script>
+    <script src="./libs/http.js"></script>
+    <!-- 分页插件 -->
+    <script src="./libs/jquery.twbsPagination.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                url: BigNew.category_list,
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
+                    console.log(backData);
+                    $('#selCategory').html(template('sel_list', backData));
+                }
+            });
+
+            // 给筛选按钮设置  文章搜索
+            $('#btnSearch').click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: BigNew.article_query,
+                    type: 'get',
+                    dataType: 'json',
+                    data: {
+                        type: $('#selCategory').val(),
+                        state: $('#selStatus').val(),
+                        page: 1,
+                        perpage: 10,
+                    },
+                    success: function (backData) {
+                        console.log(backData);
+                        $('.table>tbody').html(template('art_list', backData));
+                        // 分页栏
+                        // 将旧的分页插件销毁
+                        $('#pagination').twbsPagination('destroy');
+                        // 重新设置新的分页插件，使得页数可以不同
+                        $('#pagination').twbsPagination({
+                            totalPages: backData.data.totalPage,
+                            visiblePages: 7,
+                            first: '首页',
+                            last: '尾页',
+                            next: '下一页',
+                            prev: '上一页',
+                            onPageClick: function (event, page) {
+                                $('#page-content').text('Page' + page);
+                                console.log(page);
+                                getArticlePage(page);
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#btnSearch').click();
+
+            // 封装函数，用于点击分页加载相应的数据
+            function getArticlePage(currentPage) {
+                $.ajax({
+                    url:BigNew.article_query,
+                    type:'get',
+                    dataType:'json',
+                    data:{
+                        type: $('#selCategory').val(),
+                        state: $('#selStatus').val(),
+                        page: currentPage,
+                        perpage: 10,
+                    },
+                    success: function(backData){
+                        $('.table>tbody').html(template('art_list', backData));
+                    }
+                });
+            }
+
+            // 删除按钮
+            $('.table>tbody').on('click','.delete',function () {
+                let id = $(this).attr('data-id');
+                console.log(id);
+                $.ajax({
+                    url:BigNew.article_delete,
+                    type:'post',
+                    dataType:'json',
+                    data:{id:id},
+                    success: function(backData){
+                        console.log(backData);
+                        if (backData.code == 204) {
+                            alert(backData.msg);
+                            window.location.reload();
+                        }
+                    }
+                });
+            })
+
+        })
+    </script>
 </head>
 
 <body>
@@ -69,9 +163,102 @@
                 </tbody>
             </table>
             <div class="row text-center">
+                <ul id="pagination" class="pagination-sm"></ul>
             </div>
         </div>
     </div>
+
+    <!-- 1.文章分类模板 -->
+    <script id="sel_list" type="text/html">
+        <option value="">所有分类</option>
+        {{ each data v}}
+        <!-- 存个id用于筛选时选中文章分类 -->
+        <option value="{{ v.id }}">{{ v.name }}</option>
+        {{ /each }}
+    </script>
+
+    <!-- 2.文章列表渲染 -->
+    <script id="art_list" type="text/html">
+        {{ each data.data v}}
+        <tr>
+            <td>{{ v.title }}</td>
+            <td>{{ v.author }}</td>
+            <td>{{ v.category }}</td>
+            <td class="text-center">{{ v.date }}</td>
+            <td class="text-center">{{ v.state }}</td>
+            <td class="text-center">
+                <a href="article_edit.html?id={{ v.id }}" class="btn btn-default btn-xs">编辑</a>
+                <a href="javascript:void(0);" data-id="{{ v.id }}" class="btn btn-danger btn-xs delete">删除</a>
+            </td>
+        </tr>
+        {{ /each }}
+    </script>
+
+    <!-- 再次练习 -->
+    <!-- <script>
+        $(function () {
+            $.ajax({
+                url: BigNew.category_list,
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
+                    console.log(backData);
+                    $('#selCategory').html(template('sel_list', backData))
+                }
+            });
+
+            $('#btnSearch').click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: BigNew.article_query,
+                    type: 'get',
+                    dataType: 'json',
+                    data: {
+                        type: $('#selCategory').val(),
+                        state: $('#selStatus').val(),
+                        page: 1,
+                        perpage: 10
+                    },
+                    success: function (backData) {
+                        $('.table>tbody').html(template('art_list', backData));
+
+                        $('#pagination').twbsPagination('destroy');
+                        $('#pagination').twbsPagination({
+                            totalPages: backData.data.totalPage,
+                            visiblePages: 7,
+                            first: '第一页',
+                            last: '最后一页',
+                            next: '下一页',
+                            prev: '上一页',
+                            onPageClick: function (event, page) {
+                                $('#page-content').text('Page' + page);
+                                getArticlePage(page);
+                            }
+                        })
+                    }
+                });
+            });
+
+            $('#btnSearch').click();
+
+            function getArticlePage(currentPage) {
+                $.ajax({
+                    url:BigNew.article_query,
+                    type:'get',
+                    dataType:'json',
+                    data:{
+                        type: $('#selCategory').val(),
+                        state: $('#selStatus').val(),
+                        page: currentPage,
+                        perpage: 10
+                    },
+                    success: function(backData){
+                        $('.table>tbody').html(template('art_list', backData));
+                    }
+                });
+            }
+        })
+    </script> -->
 </body>
 
 </html>
