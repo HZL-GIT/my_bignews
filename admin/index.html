@@ -140,6 +140,44 @@
             <iframe src="./main_count.html" frameborder="0" name="my_frame"></iframe>
         </div>
     </div>
+
+    <!-- 再次练习 -->
+    <!-- <script>
+        $(function () {
+            $.ajax({
+                url: BigNew.user_info,
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
+                    console.log(backData);
+                    $('.user_info>img').attr('src', backData.data.userPic);
+                    $('.user_info>span').text(backData.data.nickname);
+                    $('.user_center_link>img').attr('src', backData.data.userPic)
+                }
+            });
+
+            $('.logout').click(function () {
+                localStorage.removeItem('token');
+                window.location.href = './login.html';
+            });
+
+
+            $('.level01').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                if($(this).index() == 1) {
+                    $('.level02').slideToggle();
+                    $(this).find('b').toggleClass('rotate0');
+                    $('.level02>li:eq(0) a')[0].click();
+                }else {
+                    $('.level02>li').removeClass('active');
+                }
+            })
+
+            $('.level02>li').click(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+            });
+        })
+    </script> -->
 </body>
 
 </html>
