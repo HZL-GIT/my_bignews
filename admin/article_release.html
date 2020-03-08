@@ -14,6 +14,89 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
+    <script src="./libs/http.js"></script>
+
+    <!-- 日期插件 -->
+    <script src="./libs/jedate/js/jedate.js"></script>
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css">
+    <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css">
+    <!-- wang富文本插件 -->
+    <script src="./libs/wangEditor.js"></script>
+    <script>
+        $(function () {
+            // 日期插件
+            jeDate("#testico", {
+                isinitVal: true,  //显示当前时间
+                festival: true,//是否显示农历
+                // multiPane: true,//是否双面板显示
+                // onClose: true,//是否为选中日期后关闭弹层，为false时选中日期后关闭弹层
+                format: "YYYY-MM-DD",
+                theme: { bgcolor: "#00A1CB", color: "#ffffff", pnColor: "#00CCFF" },//蓝色主题
+                zIndex: 10002,
+            });
+
+            // 富文本插件
+            var E = window.wangEditor;
+            var editor = new E('#editor');
+            // 或者 var editor = new E( document.getElementById('editor') )
+            editor.create();
+
+            $.ajax({
+                url:BigNew.category_list,
+                type:'get',
+                dataType:'json',
+                success: function(backData){
+                    console.log(backData);
+                    $('.category').html(template('cat_list',backData));
+                }
+            });
+
+            // 文件预览
+            //1.给file表单元素注册onchange事件
+            $('#inputCover').change(function () {
+                //1.2 获取用户选择的图片
+                var file = this.files[0];
+                //1.3 将文件转为src路径
+                var url = URL.createObjectURL(file);
+                //1.4 将url路径赋值给img标签的src
+                $('.article_cover').attr('src', url);
+            });
+
+            // 发布按钮
+            $('.btn-release').click(function (e) {
+                e.preventDefault();
+                relArticle('已发布');
+            })
+            // 存为草稿
+            $('.btn-draft').click(function (e) {
+                e.preventDefault();
+                relArticle('草稿');
+            })
+
+
+            function relArticle(state) {
+                var fd = new FormData($('form')[0]);
+                fd.append('date',$('#testico').val());
+                fd.append('content',editor.txt.html());
+                fd.append('state',state);
+                $.ajax({
+                    url: BigNew.article_publish,
+                    type: 'post',
+                    dataType: 'json',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (backData) {
+                        console.log(backData);
+                        if (backData.code == 200) {
+                            alert(backData.msg);
+                            window.location.href = './article_list.html';
+                        }
+                    }
+                });
+            }
+        })
+    </script>
 </head>
 
 <body>
@@ -51,11 +134,22 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">发布时间：</label>
                     <div class="col-sm-4">
+                        <!-- 日期插件 -->
+                        <div class="jeitem">
+                            <div class="jeinpbox">
+                                <input type="text" class="jeinput" id="testico" placeholder="YYYY-MM-DD">
+                                <div class="icons jebtns"
+                                    onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',festival:true,theme:{ bgcolor:'#00A1CB',color:'#ffffff', pnColor:'#00CCFF'},zIndex:10002})">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
+                        <!-- 富文本插件 -->
+                        <div id="editor"></div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -67,6 +161,13 @@
             </form>
         </div>
     </div>
+
+    <!-- 文章类别模板引擎 -->
+    <script id="cat_list" type="text/html"> 
+        {{ each data v}}
+            <option value = "{{ v.id }}">{{ v.name }}</option>
+        {{ /each }}
+    </script>
 </body>
 
 </html>
