@@ -32,6 +32,30 @@
             // 给筛选按钮设置  文章搜索
             $('#btnSearch').click(function (e) {
                 e.preventDefault();
+                getArticlePage(1);
+                // 代码冗余，需要重构
+                // $.ajax({
+                //     url: BigNew.article_query,
+                //     type: 'get',
+                //     dataType: 'json',
+                //     data: {
+                //         type: $('#selCategory').val(),
+                //         state: $('#selStatus').val(),
+                //         page: 1,
+                //         perpage: 10,
+                //     },
+                //     success: function (backData) {
+                //         console.log(backData);
+                //         $('.table>tbody').html(template('art_list', backData));
+                //     }
+                // });
+            });
+
+
+            $('#btnSearch').click();
+
+            // 封装函数，用于点击分页加载相应的数据
+            function getArticlePage(currentPage) {
                 $.ajax({
                     url: BigNew.article_query,
                     type: 'get',
@@ -39,63 +63,59 @@
                     data: {
                         type: $('#selCategory').val(),
                         state: $('#selStatus').val(),
-                        page: 1,
-                        perpage: 10,
-                    },
-                    success: function (backData) {
-                        console.log(backData);
-                        $('.table>tbody').html(template('art_list', backData));
-                        // 分页栏
-                        // 将旧的分页插件销毁
-                        $('#pagination').twbsPagination('destroy');
-                        // 重新设置新的分页插件，使得页数可以不同
-                        $('#pagination').twbsPagination({
-                            totalPages: backData.data.totalPage,
-                            visiblePages: 7,
-                            first: '首页',
-                            last: '尾页',
-                            next: '下一页',
-                            prev: '上一页',
-                            onPageClick: function (event, page) {
-                                $('#page-content').text('Page' + page);
-                                console.log(page);
-                                getArticlePage(page);
-                            }
-                        });
-                    }
-                });
-            });
-
-            $('#btnSearch').click();
-
-            // 封装函数，用于点击分页加载相应的数据
-            function getArticlePage(currentPage) {
-                $.ajax({
-                    url:BigNew.article_query,
-                    type:'get',
-                    dataType:'json',
-                    data:{
-                        type: $('#selCategory').val(),
-                        state: $('#selStatus').val(),
                         page: currentPage,
                         perpage: 10,
                     },
-                    success: function(backData){
+                    success: function (backData) {
                         $('.table>tbody').html(template('art_list', backData));
+                        loadPagination(backData.data.totalPage,currentPage);
+                    }
+                });
+            };
+
+            /**
+            * @description:加载分页
+            * @param {type} totalPage :总页数
+            * @param {type} startPage :起始页
+            * @return: 
+            */
+            // 分页栏
+            function loadPagination(totalPage,startPage) {
+                // 将旧的分页插件销毁
+                $('#pagination').twbsPagination('destroy');
+                // 重新设置新的分页插件，使得页数可以不同
+                $('#pagination').twbsPagination({
+                    totalPages: totalPage,  //总页数
+                    startPage:startPage,    //起始页
+                    visiblePages: 7,
+                    first: '首页',
+                    last: '尾页',
+                    next: '下一页',
+                    prev: '上一页',
+                    onPageClick: function (event, page) {
+                        $('#page-content').text('Page' + page);
+                        console.log(page);
+                        // 加载当前点击页数的文章
+                        // 如果不加条件判断将会出现递归死循环，为了解决递归，所以加上条件用于结束递归
+                        // 当当前页不等于起始页面的时候才执行里面的函数
+                        if (page != startPage) {
+                            getArticlePage(page);
+                        }
                     }
                 });
             }
 
+
             // 删除按钮
-            $('.table>tbody').on('click','.delete',function () {
+            $('.table>tbody').on('click', '.delete', function () {
                 let id = $(this).attr('data-id');
                 console.log(id);
                 $.ajax({
-                    url:BigNew.article_delete,
-                    type:'post',
-                    dataType:'json',
-                    data:{id:id},
-                    success: function(backData){
+                    url: BigNew.article_delete,
+                    type: 'post',
+                    dataType: 'json',
+                    data: { id: id },
+                    success: function (backData) {
                         console.log(backData);
                         if (backData.code == 204) {
                             alert(backData.msg);
@@ -107,7 +127,7 @@
 
             // 发表文章按钮
             $('#release_btn').click(function () {
-                $('.level02>li:eq(1)',window.parent.document).click()
+                $('.level02>li:eq(1)', window.parent.document).click()
             });
 
         })
