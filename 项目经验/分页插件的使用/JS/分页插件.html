@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +10,29 @@
     <link rel="stylesheet" href="./bootstrap.min.css">
     <script src="./jquery.twbsPagination.js"></script>
 </head>
+
 <body>
+    <!-- 分页插件HTML结构 -->
     <ul id="pagination" class="pagination-sm"></ul>
+
+    <!-- 分页插件js初始化代码 -->
     <script>
+        // 将旧的分页插件销毁
+        $('#pagination').twbsPagination('destroy');
         $('#pagination').twbsPagination({
-            totalPages:35,
-            visiblePages:7,
-            first:'第一页',
-            last :'最后一页',
-            next:'下一页',
-            prev:'上一页',
-            onPageClick:function(event,page) {
-                $('#page-content').text('Page'+page);
+            totalPages: 35, //总页数
+            startPage:1, //起始页
+            visiblePages: 7,
+            first: '首页',
+            last: '尾页',
+            next: '下一页',
+            prev: '上一页',
+            onPageClick: function (event, page) {
+                $('#page-content').text('Page' + page);
             }
         })
     </script>
-    
+
 </body>
+
 </html>
