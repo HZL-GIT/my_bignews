@@ -9,77 +9,78 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
-    
+
     <!-- 引入jq文件 -->
     <script src="./js/jquery-1.12.4.min.js"></script>
     <!-- 导入模板引擎js文件 -->
     <script src="./js/template-web.js"></script>
     <script>
         $(function () {
+
             // 1.文章分类
             $.ajax({
-                url:'http://localhost:8080/api/v1/index/category',
-                type:'get',
-                dataType:'json',
-                success: function(backData){
+                url: 'http://localhost:8080/api/v1/index/category',
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
                     console.log(backData);
-                    $('.level_two').html(template('cat_list',backData));
-                    $('.left_menu').html(template('cat_list',backData))
+                    $('.level_two').html(template('cat_list', backData));
+                    $('.left_menu').html(template('cat_list', backData))
                 }
             });
 
             // 2.首页焦点图
             $.ajax({
-                url:'http://localhost:8080/api/v1/index/hotpic',
-                type:'get',
-                dataType:'json',
-                success: function(backData){
+                url: 'http://localhost:8080/api/v1/index/hotpic',
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
                     console.log(backData);
-                    $('.focus_list').html(template('foc_list',backData));
+                    $('.focus_list').html(template('foc_list', backData));
                 }
             });
 
             // 3.最新资讯
             $.ajax({
-                url:'http://localhost:8080/api/v1/index/latest',
-                type:'get',
-                dataType:'json',
-                success: function(backData){
+                url: 'http://localhost:8080/api/v1/index/latest',
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
                     console.log(backData);
-                    $('.common_news').html(template('new_list',backData));
+                    $('.common_news').html(template('new_list', backData));
                 }
             });
 
             // 4.一周热门排行
             $.ajax({
-                url:'http://localhost:8080/api/v1/index/rank',
-                type:'get',
-                dataType:'json',
-                success: function(backData){
+                url: 'http://localhost:8080/api/v1/index/rank',
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
                     console.log(backData);
-                    $('.hotrank_list').html(template('hot_list',backData));
+                    $('.hotrank_list').html(template('hot_list', backData));
                 }
             });
 
             // 5.最新评论
             $.ajax({
-                url:'http://localhost:8080/api/v1/index/latest_comment',
-                type:'get',
-                dataType:'json',
-                success: function(backData){
+                url: 'http://localhost:8080/api/v1/index/latest_comment',
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
                     console.log(backData);
-                    $('.comment_list').html(template('com_list',backData));
+                    $('.comment_list').html(template('com_list', backData));
                 }
             });
 
             // 6.焦点关注
             $.ajax({
-                url:'http://localhost:8080/api/v1/index/attention',
-                type:'get',
-                dataType:'json',
-                success: function(backData){
+                url: 'http://localhost:8080/api/v1/index/attention',
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
                     console.log(backData);
-                    $('.guanzhu_list').html(template('gaunz_list',backData));
+                    $('.guanzhu_list').html(template('gaunz_list', backData));
                 }
             });
 
@@ -299,12 +300,12 @@
         <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
 
-    
+
     <!-- 1.分类模板 -->
     <script id="cat_list" type="text/html">
         <li class="up"></li>
         {{ each data v}}
-        <li><a href="./list.html">{{ v.name }}</a></li>
+        <li><a href="./list.html?id={{ v.id }}">{{ v.name }}</a></li>
         {{ /each }}
     </script>
 
